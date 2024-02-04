@@ -1,11 +1,9 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/engineshop
+    url: jdbc:postgresql://localhost:5432/engineshop-assistant
     username: postgres
     password: root
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-project:
-  poster: poster/
