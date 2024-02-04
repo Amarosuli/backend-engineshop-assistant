@@ -1,26 +1,27 @@
 package com.gmf.engineshop.assistant.core.base;
 
+import java.io.IOException;
+
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.HttpStatusCodeException;
 
-public interface BaseService<T, CR, UR, R> {
+public interface BaseService<T> {
 
-   ResponseEntity<R> getAll() throws HttpStatusCodeException;
+   ResponseEntity<HttpResponseDTO<ResultDTO<T>>> getAll();
 
-   ResponseEntity<R> getById(UUID id) throws HttpStatusCodeException;
+   ResponseEntity<HttpResponseDTO<T>> getById(UUID id);
 
-   ResponseEntity<R> query(String field, String param) throws HttpStatusCodeException;
+   ResponseEntity<Object> query(String field, String param);
 
-   ResponseEntity<R> create(CR request) throws HttpStatusCodeException;
+   ResponseEntity<HttpResponseDTO<T>> create(T request) throws IOException;
 
-   ResponseEntity<R> update(UUID id, UR request) throws HttpStatusCodeException;
+   ResponseEntity<HttpResponseDTO<T>> update(UUID id, T request) throws IOException;
 
-   ResponseEntity<R> softDelete(UUID id) throws HttpStatusCodeException;
+   ResponseEntity<HttpResponseDTO<T>> softDelete(UUID id) throws IOException;
 
-   ResponseEntity<R> hardDelete(UUID id) throws HttpStatusCodeException;
+   ResponseEntity<HttpResponseDTO<T>> hardDelete(UUID id) throws IOException;
 
-   ResponseEntity<R> recover(UUID id) throws HttpStatusCodeException;
+   ResponseEntity<Object> recover(UUID id) throws IOException;
 
 }
