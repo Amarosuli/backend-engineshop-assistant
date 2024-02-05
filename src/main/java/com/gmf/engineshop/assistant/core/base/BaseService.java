@@ -22,6 +22,6 @@ public interface BaseService<T> {
 
    ResponseEntity<HttpResponseDTO<T>> hardDelete(UUID id) throws IOException;
 
-   ResponseEntity<Object> recover(UUID id) throws IOException;
+   ResponseEntity<HttpResponseDTO<T>> recover(UUID id) throws IOException;
 
 }

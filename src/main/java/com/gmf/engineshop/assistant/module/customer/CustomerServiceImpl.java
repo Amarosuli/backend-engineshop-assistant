@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.gmf.engineshop.assistant.core.base.HttpResponseDTO;
 import com.gmf.engineshop.assistant.core.base.ResultDTO;
-import com.gmf.engineshop.assistant.core.helper.BaseMapper;
+import com.gmf.engineshop.assistant.core.helper.ObjectMapper;
 import com.gmf.engineshop.assistant.core.utility.ResponseHandler;
 import com.gmf.engineshop.assistant.module.customer.dto.CustomerDTO;
 
@@ -101,7 +101,7 @@ public class CustomerServiceImpl implements CustomerService {
       if (customerOptional.isPresent()) {
          CustomerDTO destination = customerOptional.get();
 
-         BaseMapper.map(request, destination);
+         ObjectMapper.map(request, destination);
 
          return ResponseHandler.getResponseEntity(
                customerRepository.save(destination), "Update Success",
@@ -153,9 +153,24 @@ public class CustomerServiceImpl implements CustomerService {
    }
 
    @Override
-   public ResponseEntity<Object> recover(UUID id) throws IOException {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'recover'");
+   public ResponseEntity<HttpResponseDTO<CustomerDTO>> recover(@NonNull UUID id) throws IOException {
+      Optional<CustomerDTO> customerOptional;
+
+      try {
+         customerOptional = customerRepository.findById(id);
+      } catch (Exception e) {
+         return ResponseHandler.getResponseEntity(null, "Data with id " + id + "Not Found", HttpStatus.NOT_FOUND);
+      }
+
+      if (customerOptional.isPresent()) {
+         CustomerDTO destination = customerOptional.get();
+         destination.setDeleted(false);
+         return ResponseHandler.getResponseEntity(
+               customerRepository.save(destination), "Recover Success",
+               HttpStatus.OK);
+      }
+
+      return ResponseHandler.getResponseEntity(null, "Failed", HttpStatus.BAD_REQUEST);
    }
 
 }
