@@ -2,7 +2,7 @@ package com.gmf.engineshop.assistant.core.helper;
 
 import java.lang.reflect.Field;
 
-public class BaseMapper {
+public class ObjectMapper {
    public static <S, T> void map(S sourceData, T target) {
       Field[] fields = sourceData.getClass().getDeclaredFields();
       for (Field field : fields) {
