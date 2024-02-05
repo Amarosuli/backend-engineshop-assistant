@@ -57,4 +57,9 @@ public class CustomerController {
       return customerService.hardDelete(id);
    }
 
+   @PutMapping("/recover/{id}")
+   public ResponseEntity<HttpResponseDTO<CustomerDTO>> recoverHandler(@PathVariable UUID id) throws IOException {
+      return customerService.recover(id);
+   }
+
 }
