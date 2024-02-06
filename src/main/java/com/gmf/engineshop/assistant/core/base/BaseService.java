@@ -8,6 +8,10 @@ import org.springframework.http.ResponseEntity;
 
 import lombok.NonNull;
 
+/**
+ * BaseService will be a parent of other Services.
+ * Since it have common methods that will be used by all Services.
+ */
 public interface BaseService<T> {
 
    ResponseEntity<HttpResponseDTO<ResultDTO<T>>> getAll();

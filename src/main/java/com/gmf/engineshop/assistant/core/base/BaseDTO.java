@@ -17,6 +17,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * BaseDTO will be parent of all DTOs.
+ * It represent the id, deleted, created, and updated fields.
+ * Since the table will always have those four fields.
+ */
 @Data
 @SuperBuilder
 @MappedSuperclass

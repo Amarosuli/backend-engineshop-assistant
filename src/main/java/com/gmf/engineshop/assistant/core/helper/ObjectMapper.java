@@ -2,6 +2,10 @@ package com.gmf.engineshop.assistant.core.helper;
 
 import java.lang.reflect.Field;
 
+/**
+ * This is a mapper method for handling request data to original DTO data.
+ * Used by Service.update
+ */
 public class ObjectMapper {
    public static <S, T> void map(S sourceData, T target) {
       Field[] fields = sourceData.getClass().getDeclaredFields();
