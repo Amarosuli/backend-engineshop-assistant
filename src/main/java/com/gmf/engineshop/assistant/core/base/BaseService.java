@@ -6,22 +6,25 @@ import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 
+import lombok.NonNull;
+
 public interface BaseService<T> {
 
    ResponseEntity<HttpResponseDTO<ResultDTO<T>>> getAll();
 
-   ResponseEntity<HttpResponseDTO<T>> getById(UUID id);
+   ResponseEntity<HttpResponseDTO<T>> getById(@NonNull UUID id);
 
-   ResponseEntity<Object> query(String field, String param);
+   ResponseEntity<HttpResponseDTO<PageAndSortResultDTO<T>>> getAllPageAndSort(Integer currentPage,
+         Integer totalItemsPerPage, String sortBy, String sortOrder);
 
    ResponseEntity<HttpResponseDTO<T>> create(T request) throws IOException;
 
-   ResponseEntity<HttpResponseDTO<T>> update(UUID id, T request) throws IOException;
+   ResponseEntity<HttpResponseDTO<T>> update(@NonNull UUID id, T request) throws IOException;
 
-   ResponseEntity<HttpResponseDTO<T>> softDelete(UUID id) throws IOException;
+   ResponseEntity<HttpResponseDTO<T>> softDelete(@NonNull UUID id) throws IOException;
 
-   ResponseEntity<HttpResponseDTO<T>> hardDelete(UUID id) throws IOException;
+   ResponseEntity<HttpResponseDTO<T>> hardDelete(@NonNull UUID id) throws IOException;
 
-   ResponseEntity<HttpResponseDTO<T>> recover(UUID id) throws IOException;
+   ResponseEntity<HttpResponseDTO<T>> recover(@NonNull UUID id) throws IOException;
 
 }
