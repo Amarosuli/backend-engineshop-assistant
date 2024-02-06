@@ -9,10 +9,10 @@ public class PageAndSortResultDTO<T> {
    private List<T> data;
    private Integer currentPage;
    private Integer totalItems;
-   private Integer lastPage;
    private Integer totalItemsPerPage;
    private Boolean hasPrev;
    private Boolean hasNext;
+   private Boolean lastPage;
    private String sortBy;
    private String sortOrder;
 }
