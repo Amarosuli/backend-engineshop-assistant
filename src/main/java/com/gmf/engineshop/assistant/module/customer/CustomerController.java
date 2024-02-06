@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gmf.engineshop.assistant.core.base.HttpResponseDTO;
+import com.gmf.engineshop.assistant.core.base.PageAndSortResultDTO;
 import com.gmf.engineshop.assistant.core.base.ResultDTO;
+import com.gmf.engineshop.assistant.core.utility.AppConstants;
 import com.gmf.engineshop.assistant.module.customer.dto.CustomerDTO;
 
 @RestController
@@ -33,6 +36,15 @@ public class CustomerController {
    @GetMapping("/{id}")
    public ResponseEntity<HttpResponseDTO<CustomerDTO>> getByIdHandler(@PathVariable UUID id) {
       return customerService.getById(id);
+   }
+
+   @GetMapping("/pagination")
+   public ResponseEntity<HttpResponseDTO<PageAndSortResultDTO<CustomerDTO>>> getAllPageAndSortHandler(
+         @RequestParam(defaultValue = AppConstants.CURRENT_PAGE) Integer currentPage,
+         @RequestParam(defaultValue = AppConstants.TOTAL_ITEMS_PER_PAGE) Integer totalItemsPerPage,
+         @RequestParam(defaultValue = AppConstants.SORT_BY) String sortBy,
+         @RequestParam(defaultValue = AppConstants.SORT_ORDER) String sortOrder) {
+      return customerService.getAllPageAndSort(currentPage, totalItemsPerPage, sortBy, sortOrder);
    }
 
    @PostMapping
