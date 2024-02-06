@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.gmf.engineshop.assistant.core.base.HttpResponseDTO;
+import com.gmf.engineshop.assistant.core.base.PageAndSortResultDTO;
 import com.gmf.engineshop.assistant.core.base.ResultDTO;
 import com.gmf.engineshop.assistant.core.helper.ObjectMapper;
 import com.gmf.engineshop.assistant.core.utility.ResponseHandler;
@@ -58,9 +63,14 @@ public class CustomerServiceImpl implements CustomerService {
    }
 
    @Override
-   public ResponseEntity<Object> query(String field, String param) {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'query'");
+   public ResponseEntity<HttpResponseDTO<PageAndSortResultDTO<CustomerDTO>>> getAllPageAndSort(Integer currentPage,
+         Integer totalItemsPerPage, String sortBy, String sortOrder) {
+
+      Sort sort = sortOrder.equalsIgnoreCase("ASC") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+      Pageable pageRequest = PageRequest.of(currentPage, totalItemsPerPage, sort);
+
+      Page<CustomerDTO> result = customerRepository.findAll(pageRequest);
+      return ResponseHandler.getResponsePage(result, "Success", HttpStatus.OK);
    }
 
    @SuppressWarnings("null")
