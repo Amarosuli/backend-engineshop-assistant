@@ -20,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class CustomerDTO extends BaseDTO<CustomerDTO> {
 
-   @Column(unique = true)
+   @Column(unique = true, nullable = false)
    private String name;
    private String description;
    private String alias;
