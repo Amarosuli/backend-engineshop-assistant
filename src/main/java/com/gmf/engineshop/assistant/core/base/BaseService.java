@@ -14,12 +14,12 @@ import lombok.NonNull;
  */
 public interface BaseService<T> {
 
-   ResponseEntity<HttpResponseDTO<ResultDTO<T>>> getAll();
+   ResponseEntity<HttpResponseDTO<ResultDTO<T>>> getAll(String status);
 
    ResponseEntity<HttpResponseDTO<T>> getById(@NonNull UUID id);
 
    ResponseEntity<HttpResponseDTO<PageAndSortResultDTO<T>>> getAllPageAndSort(Integer currentPage,
-         Integer totalItemsPerPage, String sortBy, String sortOrder);
+         Integer totalItemsPerPage, String sortBy, String sortOrder, String status);
 
    ResponseEntity<HttpResponseDTO<T>> create(T request) throws IOException;
 
