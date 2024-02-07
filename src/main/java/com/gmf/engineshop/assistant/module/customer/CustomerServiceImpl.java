@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gmf.engineshop.assistant.core.exception.AlreadyExistException;
+import com.gmf.engineshop.assistant.core.exception.InvalidDataException;
+import com.gmf.engineshop.assistant.core.exception.NotFoundException;
 import com.gmf.engineshop.assistant.core.helper.ObjectMapper;
 import com.gmf.engineshop.assistant.core.model.ServiceDTO;
 import com.gmf.engineshop.assistant.module.customer.dto.CustomerDTO;
@@ -40,18 +43,9 @@ public class CustomerServiceImpl implements CustomerService {
 
    @Override
    public ServiceDTO<CustomerDTO> getById(@NonNull UUID id) {
-
-      Optional<CustomerDTO> result;
-      try {
-         result = customerRepository.findById(id);
-      } catch (Exception e) {
-         throw new Error(e);
-      }
-
-      if (result.isPresent()) {
-         return new ServiceDTO<CustomerDTO>(result.get(), "Success", HttpStatus.OK);
-      }
-      return new ServiceDTO<CustomerDTO>(null, "Success", HttpStatus.BAD_REQUEST);
+      CustomerDTO result = customerRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("No Data with id::" + id));
+      return new ServiceDTO<CustomerDTO>(result, "Get Data Success", HttpStatus.OK);
    }
 
    @Override
@@ -85,6 +79,11 @@ public class CustomerServiceImpl implements CustomerService {
    public ServiceDTO<CustomerDTO> create(
          @NonNull CustomerDTO request) throws IOException {
 
+      CustomerDTO isExist = customerRepository.findByName(request.getName());
+      if (isExist != null) {
+         throw new AlreadyExistException("Data with name " + request.getName() + " Already Exist");
+      }
+
       CustomerDTO customer = CustomerDTO.builder()
             .id(UUID.randomUUID())
             .name(request.getName())
@@ -96,11 +95,10 @@ public class CustomerServiceImpl implements CustomerService {
       CustomerDTO result;
       try {
          result = customerRepository.save(customer);
+         return new ServiceDTO<CustomerDTO>(result, "Success", HttpStatus.CREATED);
       } catch (Exception e) {
-         return new ServiceDTO<CustomerDTO>(null, "Failed", HttpStatus.MULTI_STATUS);
+         throw new NotFoundException("No Data with id::");
       }
-      return new ServiceDTO<CustomerDTO>(result, "Success", HttpStatus.CREATED);
-
    }
 
    @SuppressWarnings("null")
@@ -108,60 +106,39 @@ public class CustomerServiceImpl implements CustomerService {
    public ServiceDTO<CustomerDTO> update(
          @NonNull UUID id,
          CustomerDTO request) throws IOException {
-      Optional<CustomerDTO> customerOptional;
 
-      try {
-         customerOptional = customerRepository.findById(id);
-      } catch (Exception e) {
-         return new ServiceDTO<>(null, "Data with id " + id + "Not Found", HttpStatus.NOT_FOUND);
-      }
+      CustomerDTO result = customerRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("No Data with id::" + id));
 
-      if (customerOptional.isPresent()) {
-         CustomerDTO destination = customerOptional.get();
+      ObjectMapper.map(request, result);
 
-         ObjectMapper.map(request, destination);
+      return new ServiceDTO<>(customerRepository.save(result), "Update Success",
+            HttpStatus.OK);
 
-         return new ServiceDTO<>(customerRepository.save(destination), "Update Success",
-               HttpStatus.OK);
-      }
-      return new ServiceDTO<>(null, "Failed", HttpStatus.BAD_REQUEST);
    }
 
    @Override
    public ServiceDTO<CustomerDTO> softDelete(@NonNull UUID id) throws IOException {
-      Optional<CustomerDTO> customerOptional;
 
-      try {
-         customerOptional = customerRepository.findById(id);
-      } catch (Exception e) {
-         return new ServiceDTO<>(null, "Data with id " + id + "Not Found", HttpStatus.NOT_FOUND);
-      }
+      CustomerDTO result = customerRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("No Data with id::" + id));
 
-      if (customerOptional.isPresent()) {
-         CustomerDTO destination = customerOptional.get();
-         destination.setDeleted(true);
-         return new ServiceDTO<>(destination, "Delete Success", HttpStatus.OK);
-      }
+      result.setDeleted(true);
+      return new ServiceDTO<>(result, "Delete Success", HttpStatus.OK);
 
-      return new ServiceDTO<>(null, "Failed", HttpStatus.BAD_REQUEST);
    }
 
    @Override
    public ServiceDTO<CustomerDTO> hardDelete(@NonNull UUID id) throws IOException {
-      Optional<CustomerDTO> customerOptional;
+      CustomerDTO result = customerRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("No Data with id::" + id));
 
-      try {
-         customerOptional = customerRepository.findById(id);
-      } catch (Exception e) {
-         return new ServiceDTO<>(null, "Data with id " + id + "Not Found", HttpStatus.NOT_FOUND);
-      }
-
-      if (customerOptional.isPresent() && customerOptional.get().getDeleted() == true) {
+      if (result.getDeleted() == true) {
          customerRepository.deleteById(id);
          return new ServiceDTO<>(null, "Destroy Success", HttpStatus.OK);
+      } else {
+         throw new InvalidDataException("Only deleted data will be destroy");
       }
-      return new ServiceDTO<>(null, "Failed, Only deleted data will be destroy",
-            HttpStatus.BAD_REQUEST);
 
    }
 
