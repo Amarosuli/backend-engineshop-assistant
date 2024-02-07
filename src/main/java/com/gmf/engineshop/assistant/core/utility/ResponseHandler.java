@@ -54,6 +54,7 @@ public class ResponseHandler<T> {
       pageObject.setData(data);
       pageObject.setTotalItems(responseObject.getSize());
       pageObject.setTotalItemsPerPage(responseObject.getNumberOfElements());
+      pageObject.setTotalPage(responseObject.getTotalPages());
       pageObject.setLastPage(responseObject.isLast());
       pageObject.setHasNext(responseObject.hasNext());
       pageObject.setHasPrev(responseObject.hasPrevious());
@@ -62,6 +63,20 @@ public class ResponseHandler<T> {
 
       HttpResponseDTO<PageAndSortResultDTO<T>> httpResponseDTO = new HttpResponseDTO<>();
       httpResponseDTO.setBody(pageObject);
+      httpResponseDTO.setMessage(message);
+      httpResponseDTO.setTime(new Date());
+      httpResponseDTO.setMeta("meta mete");
+
+      return new ResponseEntity<>(httpResponseDTO, status);
+   }
+
+   @SuppressWarnings("null")
+   public static <T> ResponseEntity<HttpResponseDTO<T>> getResponseException(T responseObject,
+         String message,
+         HttpStatus status) {
+      HttpResponseDTO<T> httpResponseDTO = new HttpResponseDTO<>();
+
+      httpResponseDTO.setBody(responseObject);
       httpResponseDTO.setMessage(message);
       httpResponseDTO.setTime(new Date());
       httpResponseDTO.setMeta("meta mete");
