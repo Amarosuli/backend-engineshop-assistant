@@ -1,10 +1,10 @@
 package com.gmf.engineshop.assistant.core.base;
 
 import java.io.IOException;
-
+import java.util.List;
 import java.util.UUID;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
 
 import lombok.NonNull;
 
@@ -14,21 +14,25 @@ import lombok.NonNull;
  */
 public interface BaseService<T> {
 
-   ResponseEntity<HttpResponseDTO<ResultDTO<T>>> getAll(String status);
+   ServiceDTO<List<T>> getAll(String status);
 
-   ResponseEntity<HttpResponseDTO<T>> getById(@NonNull UUID id);
+   ServiceDTO<T> getById(@NonNull UUID id);
 
-   ResponseEntity<HttpResponseDTO<PageAndSortResultDTO<T>>> getAllPageAndSort(Integer currentPage,
-         Integer totalItemsPerPage, String sortBy, String sortOrder, String status);
+   ServiceDTO<Page<T>> getAllPageAndSort(
+         Integer currentPage,
+         Integer totalItemsPerPage,
+         String sortBy,
+         String sortOrder,
+         String status);
 
-   ResponseEntity<HttpResponseDTO<T>> create(T request) throws IOException;
+   ServiceDTO<T> create(T request) throws IOException;
 
-   ResponseEntity<HttpResponseDTO<T>> update(@NonNull UUID id, T request) throws IOException;
+   ServiceDTO<T> update(@NonNull UUID id, T request) throws IOException;
 
-   ResponseEntity<HttpResponseDTO<T>> softDelete(@NonNull UUID id) throws IOException;
+   ServiceDTO<T> softDelete(@NonNull UUID id) throws IOException;
 
-   ResponseEntity<HttpResponseDTO<T>> hardDelete(@NonNull UUID id) throws IOException;
+   ServiceDTO<T> hardDelete(@NonNull UUID id) throws IOException;
 
-   ResponseEntity<HttpResponseDTO<T>> recover(@NonNull UUID id) throws IOException;
+   ServiceDTO<T> recover(@NonNull UUID id) throws IOException;
 
 }
