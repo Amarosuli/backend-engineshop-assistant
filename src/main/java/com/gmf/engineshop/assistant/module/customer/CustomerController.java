@@ -30,7 +30,17 @@ public class CustomerController {
 
    @GetMapping
    public ResponseEntity<HttpResponseDTO<ResultDTO<CustomerDTO>>> getAllHandler() {
-      return customerService.getAll();
+      return customerService.getAll("all");
+   }
+
+   @GetMapping("/deleted")
+   public ResponseEntity<HttpResponseDTO<ResultDTO<CustomerDTO>>> getAllDeletedHandler() {
+      return customerService.getAll("deleted");
+   }
+
+   @GetMapping("/available")
+   public ResponseEntity<HttpResponseDTO<ResultDTO<CustomerDTO>>> getAllAvailableHandler() {
+      return customerService.getAll("available");
    }
 
    @GetMapping("/{id}")
@@ -43,8 +53,9 @@ public class CustomerController {
          @RequestParam(defaultValue = AppConstants.CURRENT_PAGE) Integer currentPage,
          @RequestParam(defaultValue = AppConstants.TOTAL_ITEMS_PER_PAGE) Integer totalItemsPerPage,
          @RequestParam(defaultValue = AppConstants.SORT_BY) String sortBy,
-         @RequestParam(defaultValue = AppConstants.SORT_ORDER) String sortOrder) {
-      return customerService.getAllPageAndSort(currentPage, totalItemsPerPage, sortBy, sortOrder);
+         @RequestParam(defaultValue = AppConstants.SORT_ORDER) String sortOrder,
+         @RequestParam(defaultValue = AppConstants.STATUS) String status) {
+      return customerService.getAllPageAndSort(currentPage, totalItemsPerPage, sortBy, sortOrder, status);
    }
 
    @PostMapping
