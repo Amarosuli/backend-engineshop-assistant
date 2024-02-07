@@ -2,7 +2,6 @@ package com.gmf.engineshop.assistant.module.customer;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -36,7 +35,9 @@ public class CustomerServiceImpl implements CustomerService {
    public ServiceDTO<List<CustomerDTO>> getAll(String status) {
 
       Boolean statusDeleted = status.equalsIgnoreCase("deleted") ? true : false;
-      return new ServiceDTO<List<CustomerDTO>>(customerRepository.findByDeletedIs(statusDeleted), "Success",
+      return new ServiceDTO<List<CustomerDTO>>(
+            customerRepository.findByDeletedIs(statusDeleted),
+            "Success",
             HttpStatus.OK);
 
    }
@@ -44,8 +45,12 @@ public class CustomerServiceImpl implements CustomerService {
    @Override
    public ServiceDTO<CustomerDTO> getById(@NonNull UUID id) {
       CustomerDTO result = customerRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("No Data with id::" + id));
-      return new ServiceDTO<CustomerDTO>(result, "Get Data Success", HttpStatus.OK);
+            .orElseThrow(() -> new NotFoundException(
+                  "No Data with id::" + id));
+      return new ServiceDTO<CustomerDTO>(
+            result,
+            "Get Data Success",
+            HttpStatus.OK);
    }
 
    @Override
@@ -57,7 +62,10 @@ public class CustomerServiceImpl implements CustomerService {
          String status) {
 
       Sort sort = sortOrder.equalsIgnoreCase("ASC") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-      Pageable pageRequest = PageRequest.of(currentPage, totalItemsPerPage, sort);
+      Pageable pageRequest = PageRequest.of(
+            currentPage,
+            totalItemsPerPage,
+            sort);
 
       Page<CustomerDTO> result;
 
@@ -71,7 +79,10 @@ public class CustomerServiceImpl implements CustomerService {
          result = customerRepository.findAll(pageRequest);
       }
 
-      return new ServiceDTO<Page<CustomerDTO>>(result, "Success", HttpStatus.OK);
+      return new ServiceDTO<Page<CustomerDTO>>(
+            result,
+            "Success",
+            HttpStatus.OK);
    }
 
    @SuppressWarnings("null")
@@ -81,7 +92,8 @@ public class CustomerServiceImpl implements CustomerService {
 
       CustomerDTO isExist = customerRepository.findByName(request.getName());
       if (isExist != null) {
-         throw new AlreadyExistException("Data with name " + request.getName() + " Already Exist");
+         throw new AlreadyExistException(
+               "Data with name " + request.getName() + " Already Exist");
       }
 
       CustomerDTO customer = CustomerDTO.builder()
@@ -95,9 +107,13 @@ public class CustomerServiceImpl implements CustomerService {
       CustomerDTO result;
       try {
          result = customerRepository.save(customer);
-         return new ServiceDTO<CustomerDTO>(result, "Success", HttpStatus.CREATED);
+         return new ServiceDTO<CustomerDTO>(
+               result,
+               "Success",
+               HttpStatus.CREATED);
       } catch (Exception e) {
-         throw new NotFoundException("No Data with id::");
+         throw new NotFoundException(
+               "No Data with name :: " + request.getName());
       }
    }
 
@@ -108,11 +124,14 @@ public class CustomerServiceImpl implements CustomerService {
          CustomerDTO request) throws IOException {
 
       CustomerDTO result = customerRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("No Data with id::" + id));
+            .orElseThrow(() -> new NotFoundException(
+                  "No Data with id::" + id));
 
       ObjectMapper.map(request, result);
 
-      return new ServiceDTO<>(customerRepository.save(result), "Update Success",
+      return new ServiceDTO<>(
+            customerRepository.save(result),
+            "Update Success",
             HttpStatus.OK);
 
    }
@@ -121,43 +140,50 @@ public class CustomerServiceImpl implements CustomerService {
    public ServiceDTO<CustomerDTO> softDelete(@NonNull UUID id) throws IOException {
 
       CustomerDTO result = customerRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("No Data with id::" + id));
+            .orElseThrow(() -> new NotFoundException(
+                  "No Data with id::" + id));
 
       result.setDeleted(true);
-      return new ServiceDTO<>(result, "Delete Success", HttpStatus.OK);
+      return new ServiceDTO<>(
+            result,
+            "Delete Success",
+            HttpStatus.OK);
 
    }
 
    @Override
    public ServiceDTO<CustomerDTO> hardDelete(@NonNull UUID id) throws IOException {
+
       CustomerDTO result = customerRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("No Data with id::" + id));
+            .orElseThrow(() -> new NotFoundException(
+                  "No Data with id::" + id));
 
       if (result.getDeleted() == true) {
          customerRepository.deleteById(id);
-         return new ServiceDTO<>(null, "Destroy Success", HttpStatus.OK);
+         return new ServiceDTO<>(
+               null,
+               "Destroy Success",
+               HttpStatus.OK);
       } else {
-         throw new InvalidDataException("Only deleted data will be destroy");
+         throw new InvalidDataException(
+               "Only deleted data will be destroy");
       }
 
    }
 
    @Override
    public ServiceDTO<CustomerDTO> recover(@NonNull UUID id) throws IOException {
-      Optional<CustomerDTO> customerOptional;
 
-      try {
-         customerOptional = customerRepository.findById(id);
-      } catch (Exception e) {
-         return new ServiceDTO<>(null, "Data with id " + id + "Not Found", HttpStatus.NOT_FOUND);
-      }
+      CustomerDTO result = customerRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException(
+                  "No Data with id::" + id));
 
-      if (customerOptional.isPresent()) {
-         CustomerDTO destination = customerOptional.get();
-         destination.setDeleted(false);
-         return new ServiceDTO<>(destination, "Delete Success", HttpStatus.OK);
-      }
-      return new ServiceDTO<>(null, "Failed", HttpStatus.BAD_REQUEST);
+      result.setDeleted(false);
+      return new ServiceDTO<>(
+            result,
+            "Delete Success",
+            HttpStatus.OK);
+
    }
 
 }
