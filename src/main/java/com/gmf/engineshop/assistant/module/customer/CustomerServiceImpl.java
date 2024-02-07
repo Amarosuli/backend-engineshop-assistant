@@ -36,9 +36,10 @@ public class CustomerServiceImpl implements CustomerService {
 
    @Override
    @GetMapping
-   public ResponseEntity<HttpResponseDTO<ResultDTO<CustomerDTO>>> getAll() {
+   public ResponseEntity<HttpResponseDTO<ResultDTO<CustomerDTO>>> getAll(String status) {
 
-      List<CustomerDTO> result = customerRepository.findAll();
+      Boolean statusDeleted = status.equalsIgnoreCase("deleted") ? true : false;
+      List<CustomerDTO> result = customerRepository.findByDeletedIs(statusDeleted);
       return ResponseHandler.getResponseListEntity(result, "Success", HttpStatus.OK);
 
    }
@@ -64,12 +65,22 @@ public class CustomerServiceImpl implements CustomerService {
 
    @Override
    public ResponseEntity<HttpResponseDTO<PageAndSortResultDTO<CustomerDTO>>> getAllPageAndSort(Integer currentPage,
-         Integer totalItemsPerPage, String sortBy, String sortOrder) {
+         Integer totalItemsPerPage, String sortBy, String sortOrder, String status) {
 
       Sort sort = sortOrder.equalsIgnoreCase("ASC") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
       Pageable pageRequest = PageRequest.of(currentPage, totalItemsPerPage, sort);
 
-      Page<CustomerDTO> result = customerRepository.findAll(pageRequest);
+      Page<CustomerDTO> result;
+
+      String statusDeleted = status.equalsIgnoreCase("ALL") ? "ALL"
+            : status.equalsIgnoreCase("AVAILABLE") ? "AVAILABLE" : "DELETED";
+      if (statusDeleted == "AVAILABLE") {
+         result = customerRepository.findByDeletedIs(Boolean.FALSE, pageRequest);
+      } else if (statusDeleted == "DELETED") {
+         result = customerRepository.findByDeletedIs(Boolean.TRUE, pageRequest);
+      } else {
+         result = customerRepository.findAll(pageRequest);
+      }
       return ResponseHandler.getResponsePage(result, "Success", HttpStatus.OK);
    }
 
