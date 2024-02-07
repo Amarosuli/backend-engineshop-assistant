@@ -13,8 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gmf.engineshop.assistant.core.base.ServiceDTO;
 import com.gmf.engineshop.assistant.core.helper.ObjectMapper;
+import com.gmf.engineshop.assistant.core.model.ServiceDTO;
 import com.gmf.engineshop.assistant.module.customer.dto.CustomerDTO;
 
 import lombok.NonNull;

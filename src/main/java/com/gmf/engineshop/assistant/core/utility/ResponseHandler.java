@@ -7,8 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.gmf.engineshop.assistant.core.base.*;
 import com.gmf.engineshop.assistant.core.helper.ClassIdentifier;
+import com.gmf.engineshop.assistant.core.model.*;
 
 public class ResponseHandler<T> {
 

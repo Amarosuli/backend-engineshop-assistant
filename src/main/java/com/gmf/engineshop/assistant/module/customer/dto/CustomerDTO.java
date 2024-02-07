@@ -1,6 +1,6 @@
 package com.gmf.engineshop.assistant.module.customer.dto;
 
-import com.gmf.engineshop.assistant.core.base.BaseDTO;
+import com.gmf.engineshop.assistant.core.model.BaseDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.gmf.engineshop.assistant.core.base;
+package com.gmf.engineshop.assistant.core.model;
 
 import java.time.Instant;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package com.gmf.engineshop.assistant.core.base;
+package com.gmf.engineshop.assistant.core.model;
 
 import java.io.IOException;
 import java.util.List;

@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gmf.engineshop.assistant.core.base.HttpResponseDTO;
-import com.gmf.engineshop.assistant.core.base.PageAndSortResultDTO;
-import com.gmf.engineshop.assistant.core.base.ResultDTO;
-import com.gmf.engineshop.assistant.core.base.ServiceDTO;
+import com.gmf.engineshop.assistant.core.model.HttpResponseDTO;
+import com.gmf.engineshop.assistant.core.model.PageAndSortResultDTO;
+import com.gmf.engineshop.assistant.core.model.ResultDTO;
+import com.gmf.engineshop.assistant.core.model.ServiceDTO;
 import com.gmf.engineshop.assistant.core.utility.AppConstants;
 import com.gmf.engineshop.assistant.core.utility.ResponseHandler;
 import com.gmf.engineshop.assistant.module.customer.dto.CustomerDTO;
