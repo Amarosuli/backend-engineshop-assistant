@@ -13,4 +13,6 @@ public interface CustomerRepository<T extends CustomerDTO> extends JpaRepository
    List<CustomerDTO> findByDeletedIs(Boolean isDeleted);
 
    Page<CustomerDTO> findByDeletedIs(Boolean isDeleted, Pageable pageable);
+
+   CustomerDTO findByName(String name) throws IllegalArgumentException;
 }
