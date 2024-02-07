@@ -1,7 +1,6 @@
 package com.gmf.engineshop.assistant.module.customer;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gmf.engineshop.assistant.core.model.HttpResponseDTO;
 import com.gmf.engineshop.assistant.core.model.PageAndSortResultDTO;
-import com.gmf.engineshop.assistant.core.model.ResultDTO;
 import com.gmf.engineshop.assistant.core.model.ServiceDTO;
 import com.gmf.engineshop.assistant.core.utility.AppConstants;
 import com.gmf.engineshop.assistant.core.utility.ResponseHandler;
@@ -32,33 +30,6 @@ public class CustomerController {
    @Autowired
    private CustomerService customerService;
 
-   @GetMapping
-   public ResponseEntity<HttpResponseDTO<ResultDTO<CustomerDTO>>> getAllHandler() {
-      ServiceDTO<List<CustomerDTO>> result = customerService.getAll("all");
-      return ResponseHandler.getResponseListEntity(
-            result.getData(),
-            result.getMessage(),
-            result.getStatus());
-   }
-
-   @GetMapping("/deleted")
-   public ResponseEntity<HttpResponseDTO<ResultDTO<CustomerDTO>>> getAllDeletedHandler() {
-      ServiceDTO<List<CustomerDTO>> result = customerService.getAll("deleted");
-      return ResponseHandler.getResponseListEntity(
-            result.getData(),
-            result.getMessage(),
-            result.getStatus());
-   }
-
-   @GetMapping("/available")
-   public ResponseEntity<HttpResponseDTO<ResultDTO<CustomerDTO>>> getAllAvailableHandler() {
-      ServiceDTO<List<CustomerDTO>> result = customerService.getAll("available");
-      return ResponseHandler.getResponseListEntity(
-            result.getData(),
-            result.getMessage(),
-            result.getStatus());
-   }
-
    @GetMapping("/{id}")
    public ResponseEntity<HttpResponseDTO<CustomerDTO>> getByIdHandler(@PathVariable UUID id) {
       ServiceDTO<CustomerDTO> result = customerService.getById(id);
@@ -68,7 +39,7 @@ public class CustomerController {
             result.getStatus());
    }
 
-   @GetMapping("/pagination")
+   @GetMapping
    public ResponseEntity<HttpResponseDTO<PageAndSortResultDTO<CustomerDTO>>> getAllPageAndSortHandler(
          @RequestParam(defaultValue = AppConstants.CURRENT_PAGE) Integer currentPage,
          @RequestParam(defaultValue = AppConstants.TOTAL_ITEMS_PER_PAGE) Integer totalItemsPerPage,
