@@ -10,6 +10,7 @@ public class PageAndSortResultDTO<T> {
    private Integer currentPage;
    private Integer totalItems;
    private Integer totalItemsPerPage;
+   private Integer totalPage;
    private Boolean hasPrev;
    private Boolean hasNext;
    private Boolean lastPage;
