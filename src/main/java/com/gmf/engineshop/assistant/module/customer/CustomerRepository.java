@@ -10,9 +10,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.gmf.engineshop.assistant.module.customer.dto.CustomerDTO;
 
 public interface CustomerRepository<T extends CustomerDTO> extends JpaRepository<T, UUID> {
-   List<CustomerDTO> findByDeletedIs(Boolean isDeleted);
+   List<T> findByDeletedIs(Boolean isDeleted);
 
-   Page<CustomerDTO> findByDeletedIs(Boolean isDeleted, Pageable pageable);
+   Page<T> findByDeletedIs(Boolean isDeleted, Pageable pageable);
 
-   CustomerDTO findByName(String name) throws IllegalArgumentException;
+   T findByName(String name) throws IllegalArgumentException;
 }
