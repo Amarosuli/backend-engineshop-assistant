@@ -1,5 +1,8 @@
 package com.gmf.engineshop.assistant.core.exception;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -48,5 +51,15 @@ public class GlobalExceptionHandler {
             "NoResourceFoundException :: " + exception.getClass().getSimpleName(),
             exception.getMessage(),
             HttpStatus.FORBIDDEN);
+   }
+
+   @ExceptionHandler({ IndexOutOfBoundsException.class })
+   public ResponseEntity<HttpResponseDTO<List<String>>> IndexOutOfBoundsExceptionHanlder(
+         IndexOutOfBoundsException exception) {
+      List<String> emptyList = new ArrayList<>();
+      return ResponseHandler.getResponseException(
+            emptyList,
+            exception.getMessage(),
+            HttpStatus.ACCEPTED);
    }
 }
