@@ -172,10 +172,10 @@ public class EngineFamilyServiceImpl implements EngineFamilyService {
             .orElseThrow(() -> new NotFoundException(
                   "No Data with id::" + id));
 
-      result.setDeleted(false);
+      result.setDeleted(Boolean.FALSE);
       return new ServiceDTO<>(
             result,
-            "Delete Success",
+            "Recover Success",
             HttpStatus.OK);
 
    }
