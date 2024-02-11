@@ -9,8 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.gmf.engineshop.assistant.module.enginemodel.dto.EngineModelDTO;
 
-public interface EngineModelRepository<T extends EngineModelDTO>
-      extends JpaRepository<T, UUID> {
+public interface EngineModelRepository<T extends EngineModelDTO> extends JpaRepository<T, UUID> {
    List<T> findByDeletedIs(Boolean isDeleted);
 
    Page<T> findByDeletedIs(Boolean isDeleted, Pageable pageable);

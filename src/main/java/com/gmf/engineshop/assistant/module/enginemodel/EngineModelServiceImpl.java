@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,13 +18,19 @@ import com.gmf.engineshop.assistant.core.exception.InvalidDataException;
 import com.gmf.engineshop.assistant.core.exception.NotFoundException;
 import com.gmf.engineshop.assistant.core.helper.ObjectMapper;
 import com.gmf.engineshop.assistant.core.model.ServiceDTO;
+import com.gmf.engineshop.assistant.module.enginefamily.EngineFamilyService;
+import com.gmf.engineshop.assistant.module.enginefamily.dto.EngineFamilyDTO;
 import com.gmf.engineshop.assistant.module.enginemodel.dto.EngineModelDTO;
+import com.gmf.engineshop.assistant.module.enginemodel.dto.EngineModelRequestDTO;
 
 import lombok.NonNull;
 
 @Service
 @Transactional
 public class EngineModelServiceImpl implements EngineModelService {
+
+   @Autowired
+   EngineFamilyService engineFamilyService;
 
    private final EngineModelRepository<EngineModelDTO> engineModelRepository;
 
@@ -90,23 +97,7 @@ public class EngineModelServiceImpl implements EngineModelService {
    @Override
    public ServiceDTO<EngineModelDTO> create(EngineModelDTO request) {
 
-      EngineModelDTO isEngineModelExist = engineModelRepository.findByName(request.getName());
-      if (isEngineModelExist != null) {
-         throw new AlreadyExistException(
-               "Engine Model Data with name " + request.getName() + " is Already Exist");
-      }
-
-      EngineModelDTO result;
-      try {
-         result = engineModelRepository.save(request);
-         return new ServiceDTO<EngineModelDTO>(
-               result,
-               "Success",
-               HttpStatus.CREATED);
-      } catch (Exception e) {
-         throw new NotFoundException(
-               "No Data with name :: " + request.getName());
-      }
+      throw new UnsupportedOperationException("Unimplemented method 'create'");
 
    }
 
@@ -177,6 +168,30 @@ public class EngineModelServiceImpl implements EngineModelService {
             "Recover Success",
             HttpStatus.OK);
 
+   }
+
+   @SuppressWarnings("null")
+   @Override
+   public ServiceDTO<EngineModelDTO> create(EngineModelRequestDTO request) throws IOException {
+      EngineFamilyDTO engineFamily = engineFamilyService.getById(request.getEngineFamilyId()).getData();
+
+      EngineModelDTO isEngineModelExist = engineModelRepository.findByName(request.getName());
+      if (isEngineModelExist != null) {
+         throw new AlreadyExistException(
+               "Engine Model with name " + request.getName() + " is Already Exist");
+      }
+
+      EngineModelDTO result = EngineModelDTO
+            .builder()
+            .name(request.getName())
+            .description(request.getDescription())
+            .engineFamily(engineFamily)
+            .build();
+
+      return new ServiceDTO<EngineModelDTO>(
+            engineModelRepository.save(result),
+            "Create Success",
+            HttpStatus.CREATED);
    }
 
 }
