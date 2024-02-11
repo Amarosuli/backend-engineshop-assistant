@@ -7,8 +7,6 @@ import com.gmf.engineshop.assistant.core.model.PageAndSortResultDTO;
 import com.gmf.engineshop.assistant.core.model.ServiceDTO;
 import com.gmf.engineshop.assistant.core.utility.AppConstants;
 import com.gmf.engineshop.assistant.core.utility.ResponseHandler;
-import com.gmf.engineshop.assistant.module.enginefamily.EngineFamilyService;
-import com.gmf.engineshop.assistant.module.enginefamily.dto.EngineFamilyDTO;
 import com.gmf.engineshop.assistant.module.enginemodel.dto.EngineModelDTO;
 import com.gmf.engineshop.assistant.module.enginemodel.dto.EngineModelRequestDTO;
 
@@ -33,9 +31,6 @@ public class EngineModelController {
 
    @Autowired
    private EngineModelService engineModelService;
-
-   @Autowired
-   private EngineFamilyService engineFamilyService;
 
    @GetMapping("/{id}")
    public ResponseEntity<HttpResponseDTO<EngineModelDTO>> getByIdHandler(@PathVariable UUID id) {
@@ -72,30 +67,10 @@ public class EngineModelController {
          @RequestBody EngineModelRequestDTO engineModelRequestDTO)
          throws IOException {
 
-      EngineFamilyDTO engineFamily = engineFamilyService.getById(engineModelRequestDTO.getEngineFamilyId()).getData();
-
-      EngineModelDTO engineModelDTO = EngineModelDTO
-            .builder()
-            .name(engineModelRequestDTO.getName())
-            .description(engineModelRequestDTO.getDescription())
-            .engineFamily(engineFamily)
-            .build();
-
-      ServiceDTO<EngineModelDTO> result = engineModelService.create(engineModelDTO);
-
-      EngineModelDTO finalR = EngineModelDTO
-            .builder()
-            .id(result.getData().getId())
-            .name(result.getData().getName())
-            .description(result.getData().getDescription())
-            .engineFamily(engineFamily)
-            .created(result.getData().getCreated())
-            .deleted(result.getData().getDeleted())
-            .updated(result.getData().getUpdated())
-            .build();
+      ServiceDTO<EngineModelDTO> result = engineModelService.create(engineModelRequestDTO);
 
       return ResponseHandler.getResponseEntity(
-            finalR,
+            result.getData(),
             result.getMessage(),
             result.getStatus());
    }
