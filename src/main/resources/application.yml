@@ -1,9 +1,13 @@
 spring:
+  profiles:
+    active: dev
   datasource:
+    driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/engineshop-assistant
     username: postgres
     password: root
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: update
     show-sql: true
