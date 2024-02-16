@@ -7,6 +7,7 @@ spring:
     username: postgres
     password: root
   jpa:
+    defer-datasource-initialization: true
     open-in-view: false
     hibernate:
       ddl-auto: update
