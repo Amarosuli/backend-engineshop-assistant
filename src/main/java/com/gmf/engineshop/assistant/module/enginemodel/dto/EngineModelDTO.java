@@ -31,7 +31,8 @@ public class EngineModelDTO extends BaseDTO<EngineModelDTO> {
    @Column(unique = true, nullable = false)
    private String name;
    private String description;
-   @ManyToOne(fetch = FetchType.LAZY, optional = false)
+
+   @ManyToOne(fetch = FetchType.EAGER, optional = false)
    @JoinColumn(name = "engine_family_id", nullable = false)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JsonIncludeProperties({ "id", "name" })
