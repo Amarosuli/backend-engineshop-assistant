@@ -7,6 +7,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,8 +38,10 @@ public class BaseDTO<T extends BaseDTO<T>> {
    private Boolean deleted = Boolean.FALSE;
 
    @CreationTimestamp(source = SourceType.DB)
+   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "UTC")
    private Instant created;
 
    @UpdateTimestamp(source = SourceType.DB)
+   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss a", timezone = "UTC")
    private Instant updated;
 }
