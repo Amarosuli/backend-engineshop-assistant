@@ -43,13 +43,13 @@ public class EngineDTO extends BaseDTO<EngineDTO> {
 
    private String notes;
 
-   @ManyToOne(fetch = FetchType.LAZY, optional = false)
+   @ManyToOne(fetch = FetchType.EAGER, optional = false)
    @JoinColumn(name = "engine_model_id", nullable = false)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JsonIncludeProperties({ "id", "name" })
    private EngineModelDTO engineModel;
 
-   @ManyToOne(fetch = FetchType.LAZY, optional = false)
+   @ManyToOne(fetch = FetchType.EAGER, optional = false)
    @JoinColumn(name = "customer_id", nullable = false)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JsonIncludeProperties({ "id", "name" })
