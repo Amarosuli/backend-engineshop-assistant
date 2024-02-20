@@ -9,6 +9,7 @@ import com.gmf.engineshop.assistant.core.utility.AppConstants;
 import com.gmf.engineshop.assistant.core.utility.ResponseHandler;
 import com.gmf.engineshop.assistant.module.engine.dto.EngineDTO;
 import com.gmf.engineshop.assistant.module.engine.dto.EngineRequestDTO;
+import com.gmf.engineshop.assistant.module.engineavailability.EngineAvailabilityService;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -31,6 +32,9 @@ public class EngineController {
 
    @Autowired
    private EngineService engineService;
+
+   @Autowired
+   EngineAvailabilityService engineAvailabilityService;
 
    @GetMapping("/{id}")
    public ResponseEntity<HttpResponseDTO<EngineDTO>> getByIdHandler(@PathVariable UUID id) {
@@ -67,6 +71,8 @@ public class EngineController {
          @RequestBody EngineRequestDTO engineRequestDTO) throws IOException {
 
       ServiceDTO<EngineDTO> result = engineService.create(engineRequestDTO);
+
+      engineAvailabilityService.createEngineIncoming(result.getData().getId());
 
       return ResponseHandler.getResponseEntity(
             result.getData(),
