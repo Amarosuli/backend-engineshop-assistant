@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.gmf.engineshop.assistant.core.model.BaseDTO;
 import com.gmf.engineshop.assistant.module.enginefamily.dto.EngineFamilyDTO;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,9 +33,9 @@ public class EngineModelDTO extends BaseDTO<EngineModelDTO> {
    private String name;
    private String description;
 
-   @ManyToOne(fetch = FetchType.EAGER, optional = false)
-   @JoinColumn(name = "engine_family_id", nullable = false)
-   @OnDelete(action = OnDeleteAction.CASCADE)
+   @ManyToOne(fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
+   @JoinColumn(name = "engine_family_id", nullable = true)
+   @OnDelete(action = OnDeleteAction.SET_NULL)
    @JsonIncludeProperties({ "id", "name" })
    private EngineFamilyDTO engineFamily;
 }

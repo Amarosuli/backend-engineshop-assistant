@@ -8,6 +8,7 @@ import com.gmf.engineshop.assistant.core.model.BaseDTO;
 import com.gmf.engineshop.assistant.module.customer.dto.CustomerDTO;
 import com.gmf.engineshop.assistant.module.enginemodel.dto.EngineModelDTO;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -43,15 +44,15 @@ public class EngineDTO extends BaseDTO<EngineDTO> {
 
    private String notes;
 
-   @ManyToOne(fetch = FetchType.EAGER, optional = false)
-   @JoinColumn(name = "engine_model_id", nullable = false)
-   @OnDelete(action = OnDeleteAction.CASCADE)
+   @ManyToOne(fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
+   @JoinColumn(name = "engine_model_id", nullable = true)
+   @OnDelete(action = OnDeleteAction.SET_NULL)
    @JsonIncludeProperties({ "id", "name" })
    private EngineModelDTO engineModel;
 
-   @ManyToOne(fetch = FetchType.EAGER, optional = false)
-   @JoinColumn(name = "customer_id", nullable = false)
-   @OnDelete(action = OnDeleteAction.CASCADE)
+   @ManyToOne(fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
+   @JoinColumn(name = "customer_id", nullable = true)
+   @OnDelete(action = OnDeleteAction.SET_NULL)
    @JsonIncludeProperties({ "id", "name" })
    private CustomerDTO customer;
 }
